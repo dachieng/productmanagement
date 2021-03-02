@@ -1,3 +1,7 @@
 .card-header{
   background-color: white !important;
 }
+
+thead{
+  color:lightslategray
+}

@@ -6,12 +6,12 @@
         <label class="col-form-label">Fiter By</label>
       </div>
       <div class="col-md-4">
-        <input type="text" class="form-control">
+        <input type="text" class="form-control" [(ngModel)] = "listFilter">
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
-        <h4>Filtered By : </h4>
+        <h4>Filtered By : {{listFilter}} </h4>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <table class="table" *ngIf = "products && products.length">
       <thead>
         <tr >
-          <th> <button class="btn btn-outline-dark">Show Image</button></th>
+          <th> <button class="btn btn-outline-primary" (click) = "toggleImage()">{{showImage ? "Hide Image" : "Show Image"}}</button></th>
           <th>Product</th>
           <th>Code </th>
           <th>Available</th>
@@ -28,13 +28,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor= "let p of products">
-          <td></td>
+        <tr *ngFor= "let p of filteredProducts">
+          <td >
+            <img *ngIf = "showImage" [src]="p.imageUrl" [title] = "p.productname" [style.width.px] = "productWidth"
+            [style.margin.px] = "productMargin" >
+          </td>
           <td>{{p.productname}}</td>
-          <td>{{p.productcode}}</td>
-          <td>{{p.releaseDate}}</td>
-          <td>{{p.price}}</td>
-          <td>{{p.starRating}}</td>
+          <td>{{p.productcode | lowercase | convertToSpaces : "-"}}</td>
+
+          <td>{{p.releaseDate | date}}</td>
+          <td>{{p.price | currency}}</td>
+          <td><app-star [rating] = "p.starRating" (ratingClicked) = "onRatingClicked($event)"></app-star></td>
         </tr>
       </tbody>
     </table>

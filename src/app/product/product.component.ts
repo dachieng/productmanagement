@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IProduct } from './product';
+import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-product',
@@ -8,37 +10,48 @@ import { Component, OnInit } from '@angular/core';
 export class ProductComponent implements OnInit {
 
   title:string = "Product List"
+  productWidth:number = 50
+  productMargin:number = 2
+  showImage:boolean = false
 
-  products:any[] = [
-    {
-      "id": 2,
-      "productname": "Garden Cart",
-      "productcode": "GDN-0023",
-      "releaseDate": "December 9,2017",
-      "description": "15 Gallon Capacity",
-      "price": 50,
-      "starRating": 4.2,
-      "imageUrl": ""
+  filteredProducts: IProduct[];
 
+  _listFilter!: string;
 
-    },
-    {
-      "id": 5,
-      "productname": "Hammer",
-      "productcode": "DNI-547",
-      "releaseDate": "March 17, 2014",
-      "description": "Made in China",
-      "price": 47,
-      "starRating": 3.2,
-      "imageUrl": ""
+  get listFilter():string{
+    return this._listFilter
+  }
+
+  set listFilter(value:string){
+    this._listFilter = value
+
+    this.filteredProducts = this.listFilter ? this.performFilter(this.listFilter) : this.products
+  }
 
 
-    }
-  ]
+  products:IProduct[] = []
 
-  constructor() { }
+  constructor(private productService: ProductService) {
+    //this.filteredProducts = this.products
+
+   }
 
   ngOnInit(): void {
+    this.products = this.productService.getProducts()
+    this.filteredProducts = this.products
+  }
+
+  toggleImage():void{
+    this.showImage = !this.showImage
+  }
+
+  performFilter(filterBy : string):IProduct[]{
+    filterBy = filterBy.toLocaleLowerCase()
+    return this.products.filter((product:IProduct)=> product.productname.toLocaleLowerCase().indexOf(filterBy) !== -1)
+  }
+
+  onRatingClicked(message:string){
+    this.title = message
   }
 
 }
