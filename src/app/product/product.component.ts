@@ -14,7 +14,7 @@ export class ProductComponent implements OnInit {
   productMargin:number = 2
   showImage:boolean = false
 
-  filteredProducts: IProduct[];
+  filteredProducts!: IProduct[];
 
   _listFilter!: string;
 
