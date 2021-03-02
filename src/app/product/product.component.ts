@@ -55,5 +55,3 @@ export class ProductComponent implements OnInit {
   }
 
 }
-
-console.log("Testing git Checkout")
